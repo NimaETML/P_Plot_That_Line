@@ -15,9 +15,9 @@ namespace Plot_That_Line_Nima_Zarrabi
            
             List<string> paths =
             [
-                //paths.Add(@"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Filecoin.csv");
+                //@"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Filecoin.csv",
                 @"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Bitcoin_SV.csv",
-                @"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Fantom.csv",
+                //@"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Filecoin.csv",
             ];
 
 
