@@ -6,6 +6,7 @@ namespace Plot_That_Line_Nima_Zarrabi
     using ScottPlot.PlotStyles;
     using ScottPlot.Plottables;
     using System.Collections.Generic;
+    using System.Linq;
     using static System.Runtime.InteropServices.JavaScript.JSType;
 
     public partial class Form_PTL : Form
@@ -14,94 +15,82 @@ namespace Plot_That_Line_Nima_Zarrabi
         {
             InitializeComponent();
 
-           
-            List<string> paths =
-            [
-                @"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Filecoin.csv",
-                //@"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Bitcoin_Gold.csv",
-                @"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Fantom.csv",
-            ];
+            string sourceDirectory = (@"..\..\..\..\data");
+
             TextFieldParser parsedcsv;
 
+            int cryptoIdCount = 0;
+            
+            List<Crypto> cryptos = new List<Crypto>();
 
             // data list initialization 
-            List<string> dates = new List<string>();
-            List<double> opens = new List<double>();
-            List<double> highs = new List<double>();
-            List<double> lows = new List<double>();
-            List<double> closes = new List<double>();
-            List<double> volumes = new List<double>();
+            //List<string> dates = new List<string>();
+            List<float> opens = new List<float>();
+            List<float> highs = new List<float>();
+            List<float> lows = new List<float>();
+            List<float> closes = new List<float>();
+            List<float> volumes = new List<float>();
             List<string> currencies = new List<string>();
             List<DateTime> datetime = new List<DateTime>();
 
             // data initialization 
             string[] fields;
-            string date;
-            string open;
-            string high;
-            string low;
-            string close;
-            string volume;
-            string currency;
 
-
-            foreach (string csv_path in paths)
+            if (Directory.Exists(sourceDirectory))
             {
+                string[] paths = Directory.GetFiles(sourceDirectory);
 
-                parsedcsv = new TextFieldParser(csv_path);
-                // Set CSV parser
-                parsedcsv.CommentTokens = new string[] { "#" };
-                parsedcsv.SetDelimiters(new string[] { "," });
-                parsedcsv.HasFieldsEnclosedInQuotes = true;
-
-                // Skip the row with the column names
-                parsedcsv.ReadLine();
-
-                while (!parsedcsv.EndOfData)
+                foreach (string csv_path in paths)
                 {
-                    // Read current line fields, pointer moves to the next line.
-                    fields = parsedcsv.ReadFields();
-                    date = fields[0];
-                    open = fields[1];
-                    high = fields[2];
-                    low = fields[3];
-                    close = fields[4];
-                    volume = fields[5];
-                    currency = fields[6];
+                    parsedcsv = new TextFieldParser(csv_path);
+                    // Set CSV parser
+                    parsedcsv.CommentTokens = new string[] { "#" };
+                    parsedcsv.SetDelimiters(new string[] { "," });
+                    parsedcsv.HasFieldsEnclosedInQuotes = true;
 
+                    // Skip the row with the column names
+                    parsedcsv.ReadLine();
 
-                    // Add to the lists
+                    while (!parsedcsv.EndOfData)
+                    {
+                        // Read current line fields, pointer moves to the next line.
+                        fields = parsedcsv.ReadFields();
 
-                    datetime.Add(DateTime.Parse(date));
-                    dates.Add(date);
-                    opens.Add(double.Parse(open)); // Convert open to double
-                    highs.Add(double.Parse(high)); // Convert high to double
-                    lows.Add(double.Parse(low)); // Convert low to double
-                    closes.Add(double.Parse(close)); // Convert close to double
-                    volumes.Add(double.Parse(volume)); // Convert volume to double
-                    currencies.Add(currency);
+                        // Add to the lists
 
+                        datetime.Add(DateTime.Parse(fields[0]));
+                        opens.Add(float.Parse(fields[1])); // Convert open to float
+                        highs.Add(float.Parse(fields[2])); // Convert high to float
+                        lows.Add(float.Parse(fields[3])); // Convert low to float
+                        closes.Add(float.Parse(fields[4])); // Convert close to float
+                        volumes.Add(float.Parse(fields[5])); // Convert volume to float
+                        currencies.Add(fields[6]);
+                    }
+
+                    if (currencies.Distinct().Skip(1).Any())
+                    {
+                        cryptos.Add(new Crypto(cryptoIdCount, "blp", datetime, opens, highs, lows, closes, volumes, currencies[0]));
+
+                        // Now plot the data
+                        formsPlot1.Plot.Add.ScatterLine(datetime, closes);
+
+                        formsPlot1.Plot.YLabel("Price per unit (in " + currencies[0] + ")");
+                        // tell the plot to display dates on the bottom axis
+                        formsPlot1.Plot.Axes.DateTimeTicksBottom();
+
+                        formsPlot1.Refresh();
+
+                        // OUT OF RANGE PROBLEM, NEED TO MAKE CLASSES
+                    }
+                    else
+                    {
+                        MessageBox.Show("Votre CSV est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!");
+                    }
                 }
-                // use LINQ and DateTime.ToOADate() to convert DateTime[] to double[]
-                //double[] doubledatetime = datetime.Select(x => x.ToOADate()).ToArray();
-
-                // Now plot the data
-                formsPlot1.Plot.Add.ScatterLine(datetime, closes);
-
-                formsPlot1.Plot.YLabel("Price per unit (in " + currencies[0] + ")");
-                // tell the plot to display dates on the bottom axis
-                formsPlot1.Plot.Axes.DateTimeTicksBottom();
-
-                formsPlot1.Refresh();
-
-                // OUT OF RANGE PROBLEM, NEED TO MAKE CLASSES
-                datetime.Clear();
-                dates.Clear();
-                opens.Clear();
-                highs.Clear();
-                lows.Clear();
-                volumes.Clear();
-                currencies.Clear();
+            }
+            else
+            {
+                MessageBox.Show("{0} is not a valid directory.");
             }
         }
 
