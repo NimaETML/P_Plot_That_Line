@@ -1,6 +1,11 @@
 namespace Plot_That_Line_Nima_Zarrabi
 {
     using Microsoft.VisualBasic.FileIO;
+    using System.Windows.Forms;
+    using System.Collections;
+    using System.ComponentModel;
+    using System.Drawing.Design;
+    using System.Reflection;
     using ScottPlot;
     using ScottPlot.Colormaps;
     using ScottPlot.PlotStyles;
@@ -42,6 +47,7 @@ namespace Plot_That_Line_Nima_Zarrabi
 
                 if (paths.Length == 0)
                 {
+                    //Error Message if no valid file in selected path
                     MessageBox.Show("Veillez vous assurez que le dossier \"data\" contiens au moins un fichier .csv", "No valid imput file Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 foreach (string csv_path in paths)
@@ -73,7 +79,9 @@ namespace Plot_That_Line_Nima_Zarrabi
 
                     if (!currencies.Distinct().Skip(1).Any())
                     {
-                        cryptos.Add(new Crypto(cryptoIdCount, "blp", datetime, opens, highs, lows, closes, volumes, currencies[0]));
+
+                        cryptos.Add(new Crypto(cryptoIdCount, Path.GetFileNameWithoutExtension(csv_path), datetime, opens, highs, lows, closes, volumes, currencies[0]));
+                        cryptoIdCount++;
 
                         datetime.Clear();
                         opens.Clear();
@@ -86,31 +94,57 @@ namespace Plot_That_Line_Nima_Zarrabi
                     else
                     {
                         // Message if CSV contains different values for the currency
-                        MessageBox.Show("Votre CSV est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!");
+                        MessageBox.Show("Votre CSV (" + Path.GetFileName(csv_path) + ") est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!", "Different values in currency field Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                         Application.Exit();
                     }
                 }
-                foreach (Crypto currentCrypto in cryptos)
+
+                // if all currencies are the same across CSVs
+                if (!cryptos.Select(c => c.Currency).Distinct().Skip(1).Any())
                 {
-                    // Now plot the data
-                    formsPlot1.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
-
-                    formsPlot1.Plot.YLabel("Price per unit (in " + currentCrypto.Currency + ")");
+                    // Setup plot
+                    ScottlLinePlot.Plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
                     // tell the plot to display dates on the bottom axis
-                    formsPlot1.Plot.Axes.DateTimeTicksBottom();
+                    ScottlLinePlot.Plot.Axes.DateTimeTicksBottom();
+                    foreach (Crypto currentCrypto in cryptos)
+                    {
+                        // Now plot the data
+                        ScottlLinePlot.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
 
-                    formsPlot1.Refresh();
+                        PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
+
+                        // Automatically check new checkboxes as they get made
+                        PlotLinesCheckBoxList.SetItemChecked(PlotLinesCheckBoxList.Items.Count - 1, true);
+                    }
+                    ScottlLinePlot.Refresh();
                 }
+                else
+                {
+                    MessageBox.Show("Vos CSV séléctionné n'on pas tous le même type de monnaie, et ne peuvent alors pas être comparés.", "Different currency in different files Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                }
+
             }
             else
             {
                 MessageBox.Show("{0} is not a valid directory.");
             }
         }
-        private void Form1_Load(object sender, EventArgs e)
+        private void ScottlLinePlot_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void PlotLinesCheckBoxList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        void PlotLinesCheckBoxList_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // MAKE IT SO CHECKING ON/OFF MAKES THE PLOTLINES APPEAR/DISAPEAR
+            //if this.
+            //ScottlLinePlot.Plot.Remove()
         }
     }
 }
