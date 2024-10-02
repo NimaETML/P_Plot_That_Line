@@ -20,26 +20,30 @@ namespace Plot_That_Line_Nima_Zarrabi
             TextFieldParser parsedcsv;
 
             int cryptoIdCount = 0;
-            
+
             List<Crypto> cryptos = new List<Crypto>();
 
             // data list initialization 
             //List<string> dates = new List<string>();
-            List<float> opens = new List<float>();
-            List<float> highs = new List<float>();
-            List<float> lows = new List<float>();
-            List<float> closes = new List<float>();
-            List<float> volumes = new List<float>();
-            List<string> currencies = new List<string>();
-            List<DateTime> datetime = new List<DateTime>();
+            List<float> opens = [];
+            List<float> highs = [];
+            List<float> lows = [];
+            List<float> closes = [];
+            List<float> volumes = [];
+            List<string> currencies = [];
+            List<DateTime> datetime = [];
 
             // data initialization 
             string[] fields;
 
             if (Directory.Exists(sourceDirectory))
             {
-                string[] paths = Directory.GetFiles(sourceDirectory);
+                string[] paths = Directory.GetFiles(sourceDirectory, "*.csv");
 
+                if (paths.Length == 0)
+                {
+                    MessageBox.Show("Veillez vous assurez que le dossier \"data\" contiens au moins un fichier .csv", "No valid imput file Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 foreach (string csv_path in paths)
                 {
                     parsedcsv = new TextFieldParser(csv_path);
@@ -67,25 +71,36 @@ namespace Plot_That_Line_Nima_Zarrabi
                         currencies.Add(fields[6]);
                     }
 
-                    if (currencies.Distinct().Skip(1).Any())
+                    if (!currencies.Distinct().Skip(1).Any())
                     {
                         cryptos.Add(new Crypto(cryptoIdCount, "blp", datetime, opens, highs, lows, closes, volumes, currencies[0]));
 
-                        // Now plot the data
-                        formsPlot1.Plot.Add.ScatterLine(datetime, closes);
-
-                        formsPlot1.Plot.YLabel("Price per unit (in " + currencies[0] + ")");
-                        // tell the plot to display dates on the bottom axis
-                        formsPlot1.Plot.Axes.DateTimeTicksBottom();
-
-                        formsPlot1.Refresh();
-
-                        // OUT OF RANGE PROBLEM, NEED TO MAKE CLASSES
+                        datetime.Clear();
+                        opens.Clear();
+                        highs.Clear();
+                        lows.Clear();
+                        closes.Clear();
+                        volumes.Clear();
+                        currencies.Clear();
                     }
                     else
                     {
+                        // Message if CSV contains different values for the currency
                         MessageBox.Show("Votre CSV est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!");
+                        break;
+                        Application.Exit();
                     }
+                }
+                foreach (Crypto currentCrypto in cryptos)
+                {
+                    // Now plot the data
+                    formsPlot1.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
+
+                    formsPlot1.Plot.YLabel("Price per unit (in " + currentCrypto.Currency + ")");
+                    // tell the plot to display dates on the bottom axis
+                    formsPlot1.Plot.Axes.DateTimeTicksBottom();
+
+                    formsPlot1.Refresh();
                 }
             }
             else
@@ -93,7 +108,6 @@ namespace Plot_That_Line_Nima_Zarrabi
                 MessageBox.Show("{0} is not a valid directory.");
             }
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
