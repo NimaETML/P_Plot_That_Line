@@ -3,7 +3,10 @@ namespace Plot_That_Line_Nima_Zarrabi
     using Microsoft.VisualBasic.FileIO;
     using ScottPlot;
     using ScottPlot.Colormaps;
+    using ScottPlot.PlotStyles;
     using ScottPlot.Plottables;
+    using System.Collections.Generic;
+    using System.Linq;
     using static System.Runtime.InteropServices.JavaScript.JSType;
 
     public partial class Form_PTL : Form
@@ -12,69 +15,99 @@ namespace Plot_That_Line_Nima_Zarrabi
         {
             InitializeComponent();
 
-            // CSV path
-            var path = @"C:\Users\pu78ifh\Desktop\P_Plot_That_Line\Data\Bitcoin_Gold.csv";
+            string sourceDirectory = (@"..\..\..\..\data");
+
+            TextFieldParser parsedcsv;
+
+            int cryptoIdCount = 0;
+
+            List<Crypto> cryptos = new List<Crypto>();
 
             // data list initialization 
-            List<string> dates = new List<string>();
-            List<double> opens = new List<double>();
-            List<double> highs = new List<double>();
-            List<double> lows = new List<double>();
-            List<double> closes = new List<double>();
-            List<double> volumes = new List<double>();
-            List<string> currencies = new List<string>();
-            List<DateTime> datetime = new List<DateTime>();
+            //List<string> dates = new List<string>();
+            List<float> opens = [];
+            List<float> highs = [];
+            List<float> lows = [];
+            List<float> closes = [];
+            List<float> volumes = [];
+            List<string> currencies = [];
+            List<DateTime> datetime = [];
 
+            // data initialization 
+            string[] fields;
 
-            using (TextFieldParser csvParser = new TextFieldParser(path))
+            if (Directory.Exists(sourceDirectory))
             {
-                // Set CSV parser
-                csvParser.CommentTokens = new string[] { "#" };
-                csvParser.SetDelimiters(new string[] { "," });
-                csvParser.HasFieldsEnclosedInQuotes = true;
+                string[] paths = Directory.GetFiles(sourceDirectory, "*.csv");
 
-                // Skip the row with the column names
-                csvParser.ReadLine();
-
-                while (!csvParser.EndOfData)
+                if (paths.Length == 0)
                 {
-                    // Read current line fields, pointer moves to the next line.
-                    string[] fields = csvParser.ReadFields();
-                    string date = fields[0];
-                    string open = fields[1];
-                    string high = fields[2];
-                    string low = fields[3];
-                    string close = fields[4];
-                    string volume = fields[5];
-                    string currency = fields[6];
-
-
-                    // Add to the lists
-
-                    datetime.Add(DateTime.Parse(date));
-                    dates.Add(date);
-                    opens.Add(double.Parse(open)); // Convert open to double
-                    highs.Add(double.Parse(high)); // Convert high to double
-                    lows.Add(double.Parse(low)); // Convert low to double
-                    closes.Add(double.Parse(close)); // Convert close to double
-                    volumes.Add(double.Parse(volume)); // Convert volume to double
-                    currencies.Add(currency);
-
+                    MessageBox.Show("Veillez vous assurez que le dossier \"data\" contiens au moins un fichier .csv", "No valid imput file Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } 
-            // use LINQ and DateTime.ToOADate() to convert DateTime[] to double[]
-            //double[] doubledatetime = datetime.Select(x => x.ToOADate()).ToArray();
+                foreach (string csv_path in paths)
+                {
+                    parsedcsv = new TextFieldParser(csv_path);
+                    // Set CSV parser
+                    parsedcsv.CommentTokens = new string[] { "#" };
+                    parsedcsv.SetDelimiters(new string[] { "," });
+                    parsedcsv.HasFieldsEnclosedInQuotes = true;
 
-            // Now plot the data
-            formsPlot1.Plot.Add.ScatterLine(datetime, closes);
+                    // Skip the row with the column names
+                    parsedcsv.ReadLine();
 
-            formsPlot1.Plot.YLabel("Price per unit (in " + currencies[0] + ")");
-            // tell the plot to display dates on the bottom axis
-            formsPlot1.Plot.Axes.DateTimeTicksBottom();
+                    while (!parsedcsv.EndOfData)
+                    {
+                        // Read current line fields, pointer moves to the next line.
+                        fields = parsedcsv.ReadFields();
 
-            formsPlot1.Refresh();
+                        // Add to the lists
+
+                        datetime.Add(DateTime.Parse(fields[0]));
+                        opens.Add(float.Parse(fields[1])); // Convert open to float
+                        highs.Add(float.Parse(fields[2])); // Convert high to float
+                        lows.Add(float.Parse(fields[3])); // Convert low to float
+                        closes.Add(float.Parse(fields[4])); // Convert close to float
+                        volumes.Add(float.Parse(fields[5])); // Convert volume to float
+                        currencies.Add(fields[6]);
+                    }
+
+                    if (!currencies.Distinct().Skip(1).Any())
+                    {
+                        cryptos.Add(new Crypto(cryptoIdCount, "blp", datetime, opens, highs, lows, closes, volumes, currencies[0]));
+
+                        datetime.Clear();
+                        opens.Clear();
+                        highs.Clear();
+                        lows.Clear();
+                        closes.Clear();
+                        volumes.Clear();
+                        currencies.Clear();
+                    }
+                    else
+                    {
+                        // Message if CSV contains different values for the currency
+                        MessageBox.Show("Votre CSV est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!");
+                        break;
+                        Application.Exit();
+                    }
+                }
+                foreach (Crypto currentCrypto in cryptos)
+                {
+                    // Now plot the data
+                    formsPlot1.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
+
+                    formsPlot1.Plot.YLabel("Price per unit (in " + currentCrypto.Currency + ")");
+                    // tell the plot to display dates on the bottom axis
+                    formsPlot1.Plot.Axes.DateTimeTicksBottom();
+
+                    formsPlot1.Refresh();
+                }
+            }
+            else
+            {
+                MessageBox.Show("{0} is not a valid directory.");
+            }
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
