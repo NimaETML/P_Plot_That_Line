@@ -48,6 +48,7 @@
             PlotLinesCheckBoxList.Size = new Size(210, 274);
             PlotLinesCheckBoxList.TabIndex = 1;
             PlotLinesCheckBoxList.SelectedIndexChanged += PlotLinesCheckBoxList_SelectedIndexChanged;
+            PlotLinesCheckBoxList.ItemCheck += PlotLinesCheckBoxList_ItemCheck;
             // 
             // Form_PTL
             // 

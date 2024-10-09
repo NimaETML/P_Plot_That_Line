@@ -140,8 +140,19 @@ namespace Plot_That_Line_Nima_Zarrabi
         {
 
         }
+        
         void PlotLinesCheckBoxList_ItemCheck(object sender, ItemCheckEventArgs e)
         {
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
+            }
+            else
+            {
+                MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS UNCHECKED");
+            }
+
             // MAKE IT SO CHECKING ON/OFF MAKES THE PLOTLINES APPEAR/DISAPEAR
             //if this.
             //ScottlLinePlot.Plot.Remove()
