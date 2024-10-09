@@ -13,9 +13,14 @@ namespace Plot_That_Line_Nima_Zarrabi
     using System.Collections.Generic;
     using System.Linq;
     using static System.Runtime.InteropServices.JavaScript.JSType;
+    using System.Security.Cryptography;
+    using ScottPlot.DataSources;
 
     public partial class Form_PTL : Form
     {
+        private List<List<double>> xs;
+        private List<List<double>> ys;
+
         public Form_PTL()
         {
             InitializeComponent();
@@ -100,24 +105,44 @@ namespace Plot_That_Line_Nima_Zarrabi
                     }
                 }
 
+
+                //List<double> ys = new()
+                //List<double> xs = new() { 1, 2, 3, 4, 5 };
+                //List<double> ys = new() { 1, 4, 9, 16, 25 };
                 // if all currencies are the same across CSVs
                 if (!cryptos.Select(c => c.Currency).Distinct().Skip(1).Any())
                 {
+                    Plot plotCanva = new Plot();
+
+                    Scatter scatter = new Scatter(new ScatterSourceGenericList<List<double>, List<double>>(xs, ys));
+                    scatter.LineStyle.Color = new Color();
+                    scatter.MarkerStyle.FillColor = new Color();
+                    //ScottlLinePlot.Plot.PlottableList.Add(scatter);
+
+                    //ScottlLinePlot.Plot.Add.Plottable(scatter);
+
+
                     // Setup plot
                     ScottlLinePlot.Plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
                     // tell the plot to display dates on the bottom axis
                     ScottlLinePlot.Plot.Axes.DateTimeTicksBottom();
-                    foreach (Crypto currentCrypto in cryptos)
-                    {
-                        // Now plot the data
-                        ScottlLinePlot.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
+                    //ScottlLinePlot.Plot.Add.Plot(scatter);
+                    ScottlLinePlot.Plot.Add.Plottable(scatter);
 
-                        PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
 
-                        // Automatically check new checkboxes as they get made
-                        PlotLinesCheckBoxList.SetItemChecked(PlotLinesCheckBoxList.Items.Count - 1, true);
-                    }
+                    // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE
+
+                    PlotLinesCheckBoxList.Items.Add("blep");
                     ScottlLinePlot.Refresh();
+
+
+                    //ScottlLinePlot.Plot.PlottableList.Add(Scatter(xs, ys,));
+                    /*
+                    ScottlLinePlot.Plot.PlottableList.Add(new Arrow()
+                    {
+                        Base = new Coordinates(1, 2),
+                        Tip = new Coordinates(3, 4),
+                    });*/
                 }
                 else
                 {
@@ -128,7 +153,7 @@ namespace Plot_That_Line_Nima_Zarrabi
             }
             else
             {
-                MessageBox.Show("{0} is not a valid directory.");
+                MessageBox.Show("Le répértoire séléctionné \"{0}\" n'est pas un répéroire valid.", "invalid directory Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void ScottlLinePlot_Load(object sender, EventArgs e)
@@ -141,11 +166,33 @@ namespace Plot_That_Line_Nima_Zarrabi
 
         }
         
-        void PlotLinesCheckBoxList_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void GenerateScottPlot(Plot plot, List<Crypto> cryptos)
+        {
+            // Setup plot
+            ScottlLinePlot.Plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
+            // tell the plot to display dates on the bottom axis
+            ScottlLinePlot.Plot.Axes.DateTimeTicksBottom();
+            foreach (Crypto currentCrypto in cryptos)
+            {
+                // Now plot the data
+                ScottlLinePlot.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
+
+                PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
+
+                // Automatically check new checkboxes as they get made
+                PlotLinesCheckBoxList.SetItemChecked(PlotLinesCheckBoxList.Items.Count - 1, true);
+            }
+            ScottlLinePlot.Refresh();
+        }
+
+
+        private void PlotLinesCheckBoxList_ItemCheck(object sender, ItemCheckEventArgs e)
         {
 
             if (e.NewValue == CheckState.Checked)
             {
+                //ScottlLinePlot.Plot.Remove();
+                //cryptos.Clear();
                 MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
             }
             else

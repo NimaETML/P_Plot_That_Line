@@ -53,7 +53,7 @@
           "dependencies": {
             "ScottPlot.WinForms": {
               "target": "Package",
-              "version": "[5.0.37, )"
+              "version": "[5.0.39, )"
             }
           },
           "imports": [
