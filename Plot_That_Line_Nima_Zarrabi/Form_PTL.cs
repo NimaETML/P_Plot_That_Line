@@ -18,9 +18,8 @@ namespace Plot_That_Line_Nima_Zarrabi
 
     public partial class Form_PTL : Form
     {
-        private List<List<double>> xs;
-        private List<List<double>> ys;
-        private List<List<double>> eye;
+        private List<double> xs;
+        private List<double> ys;
         private List<Scatter> scatterList = [];
 
         public Form_PTL()
@@ -102,28 +101,23 @@ namespace Plot_That_Line_Nima_Zarrabi
                     {
                         // Message if CSV contains different values for the currency
                         MessageBox.Show("Votre CSV (" + Path.GetFileName(csv_path) + ") est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!", "Different values in currency field Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        break;
                         Application.Exit();
+                        break;
                     }
                 }
 
 
                 //List<double> ys = new()
-                xs = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]];
-                ys = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 9]];
+                xs = [1, 2, 3, 4, 5];
+                ys = [6, 9, 23, 42, 84];
                 // if all currencies are the same across CSVs
                 if (!cryptos.Select(c => c.Currency).Distinct().Skip(1).Any())
                 {
                     Plot plotCanva = new Plot();
                     //plotCanva.Remove()
-                    Scatter scatter = new Scatter(new ScatterSourceGenericList<List<double>, List<double>>(xs, ys));
-                    scatter.Label = "test";
-                    scatterList.Add(scatter);
-                    Arrow ar = new Arrow()
-                    {
-                        Base = new Coordinates(1, 2),
-                        Tip = new Coordinates(3, 4),
-                    };
+                    //Scatter scatter = new Scatter(new ScatterSourceGenericList<List<double>, List<double>>(xs, ys));
+                    //var scatter2 = ScottlLinePlot.Plot.Add.Scatter(ys, xs);
+
                     //Scatter scatter = new Scatter(new IScatterSource(xs, ys));
                     //scatter.LineStyle.Color = new Color();
                     //scatter.MarkerStyle.FillColor = new Color();
@@ -132,18 +126,10 @@ namespace Plot_That_Line_Nima_Zarrabi
                     //ScottlLinePlot.Plot.Add.Plottable(scatter);
 
 
-                    // Setup plot
-                    ScottlLinePlot.Plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
-                    // tell the plot to display dates on the bottom axis
-                    ScottlLinePlot.Plot.Axes.DateTimeTicksBottom();
                     //ScottlLinePlot.Plot.Add.Plot(scatter);
-                    ScottlLinePlot.Plot.Add.Plottable(scatter);
+                    //ScottlLinePlot.Plot.Add.Plottable(scatter);
 
-
-                    // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE  // PROBLEM HERE
-
-                    PlotLinesCheckBoxList.Items.Add(scatterList.Last().Label);
-                    ScottlLinePlot.Refresh();
+                    GenerateScottPlot(ScottlLinePlot.Plot, cryptos);
 
 
                     //ScottlLinePlot.Plot.PlottableList.Add(Scatter(xs, ys,));
@@ -179,14 +165,15 @@ namespace Plot_That_Line_Nima_Zarrabi
         private void GenerateScottPlot(Plot plot, List<Crypto> cryptos)
         {
             // Setup plot
-            ScottlLinePlot.Plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
+            plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
             // tell the plot to display dates on the bottom axis
-            ScottlLinePlot.Plot.Axes.DateTimeTicksBottom();
+            plot.Axes.DateTimeTicksBottom();
+
             foreach (Crypto currentCrypto in cryptos)
             {
                 // Now plot the data
-                ScottlLinePlot.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
-
+                scatterList.Add(plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close));
+                plot.Add.Plottable(scatterList.Last());
                 PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
 
                 // Automatically check new checkboxes as they get made
@@ -201,7 +188,8 @@ namespace Plot_That_Line_Nima_Zarrabi
 
             if (e.NewValue == CheckState.Checked)
             {
-                ScottlLinePlot.Plot.Remove(ScottlLinePlot.Plot.PlottableList[0]);
+                /// ALMOST FINISHED
+                ScottlLinePlot.Plot.Remove(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
                 ScottlLinePlot.Refresh();
                 MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
             }
@@ -210,9 +198,17 @@ namespace Plot_That_Line_Nima_Zarrabi
                 // code fait en Linq, non fonctionnel car ScottlLinePlot.Plot.Add.Plottable n'accepte pas un list.Where en paramètre car il le consider comme un array et il demande un seul objet
                 // METTRE .first !!!
                 // !!!
-                // !!!
-                //ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == (PlotLinesCheckBoxList.Items[e.Index])));
-
+                // !!! FIRST already there
+                foreach (Scatter element in scatterList)
+                {
+                    if (element.LegendText == Convert.ToString(PlotLinesCheckBoxList.Items[e.Index]))
+                    {
+                        ScottlLinePlot.Plot.Add.Plottable(element);
+                        ScottlLinePlot.Refresh();
+                    }
+                }/*
+                ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+                /*
                 foreach (Scatter element in scatterList)
                 {
                     if (element.LegendText == PlotLinesCheckBoxList.Items[e.Index])
@@ -220,7 +216,8 @@ namespace Plot_That_Line_Nima_Zarrabi
                         ScottlLinePlot.Plot.Add.Plottable(element);
                         ScottlLinePlot.Refresh();
                     }
-                }
+                }*/
+
                 MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS UNCHECKED");
             }
 
