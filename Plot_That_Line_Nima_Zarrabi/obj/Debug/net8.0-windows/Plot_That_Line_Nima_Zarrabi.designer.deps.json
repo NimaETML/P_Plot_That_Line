@@ -45,27 +45,27 @@
           }
         }
       },
-      "ScottPlot/5.0.37": {
+      "ScottPlot/5.0.39": {
         "dependencies": {
           "SkiaSharp": "2.88.8",
           "SkiaSharp.NativeAssets.Linux.NoDependencies": "2.88.8"
         },
         "runtime": {
           "lib/net8.0/ScottPlot.dll": {
-            "assemblyVersion": "5.0.37.0",
-            "fileVersion": "5.0.37.0"
+            "assemblyVersion": "5.0.39.0",
+            "fileVersion": "5.0.39.0"
           }
         }
       },
-      "ScottPlot.WinForms/5.0.37": {
+      "ScottPlot.WinForms/5.0.39": {
         "dependencies": {
-          "ScottPlot": "5.0.37",
+          "ScottPlot": "5.0.39",
           "SkiaSharp.Views.WindowsForms": "2.88.8"
         },
         "runtime": {
           "lib/net6.0-windows7.0/ScottPlot.WinForms.dll": {
-            "assemblyVersion": "5.0.37.0",
-            "fileVersion": "5.0.37.0"
+            "assemblyVersion": "5.0.39.0",
+            "fileVersion": "5.0.39.0"
           }
         }
       },
@@ -219,19 +219,19 @@
       "path": "opentk.glcontrol/3.1.0",
       "hashPath": "opentk.glcontrol.3.1.0.nupkg.sha512"
     },
-    "ScottPlot/5.0.37": {
+    "ScottPlot/5.0.39": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-d5jkB/eHbyjL1+gKPQGHhnmif/sOaJAhmqQg21dE3/tzgIvpu5r6JZPUpmV6TxB5f0q35zm0j9wKn2Xl4zIy5w==",
-      "path": "scottplot/5.0.37",
-      "hashPath": "scottplot.5.0.37.nupkg.sha512"
+      "sha512": "sha512-SyUIF7OPhieza8Lu/s5uLarBf6mhSPkRuwkJ3/KwTrRtpWmUwtTPWil4IQZ4HVp7Q15F/uRUmRDYTAeQcg9KGg==",
+      "path": "scottplot/5.0.39",
+      "hashPath": "scottplot.5.0.39.nupkg.sha512"
     },
-    "ScottPlot.WinForms/5.0.37": {
+    "ScottPlot.WinForms/5.0.39": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-oCM53u8oaY3gjAfXrBY1yvSxLqZ95EizXaHOuFPP9SC64JiR5xzrVh57X32JCBONeyR+6GCNJyr788KnuqDDCQ==",
-      "path": "scottplot.winforms/5.0.37",
-      "hashPath": "scottplot.winforms.5.0.37.nupkg.sha512"
+      "sha512": "sha512-aG6y5wWbsu/DSYz6vPGItNKTqK4Lw1B7dtsVft1zNSIKnZcWr9EdfVlM+eMj1lxENNU1u9+UTutglSUWSExLlA==",
+      "path": "scottplot.winforms/5.0.39",
+      "hashPath": "scottplot.winforms.5.0.39.nupkg.sha512"
     },
     "SkiaSharp/2.88.8": {
       "type": "package",

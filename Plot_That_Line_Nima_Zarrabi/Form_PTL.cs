@@ -1,6 +1,11 @@
 namespace Plot_That_Line_Nima_Zarrabi
 {
     using Microsoft.VisualBasic.FileIO;
+    using System.Windows.Forms;
+    using System.Collections;
+    using System.ComponentModel;
+    using System.Drawing.Design;
+    using System.Reflection;
     using ScottPlot;
     using ScottPlot.Colormaps;
     using ScottPlot.PlotStyles;
@@ -8,9 +13,13 @@ namespace Plot_That_Line_Nima_Zarrabi
     using System.Collections.Generic;
     using System.Linq;
     using static System.Runtime.InteropServices.JavaScript.JSType;
+    using System.Security.Cryptography;
+    using ScottPlot.DataSources;
 
     public partial class Form_PTL : Form
     {
+        private List<Scatter> scatterList = [];
+
         public Form_PTL()
         {
             InitializeComponent();
@@ -42,6 +51,7 @@ namespace Plot_That_Line_Nima_Zarrabi
 
                 if (paths.Length == 0)
                 {
+                    //Error Message if no valid file in selected path
                     MessageBox.Show("Veillez vous assurez que le dossier \"data\" contiens au moins un fichier .csv", "No valid imput file Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 foreach (string csv_path in paths)
@@ -73,7 +83,9 @@ namespace Plot_That_Line_Nima_Zarrabi
 
                     if (!currencies.Distinct().Skip(1).Any())
                     {
-                        cryptos.Add(new Crypto(cryptoIdCount, "blp", datetime, opens, highs, lows, closes, volumes, currencies[0]));
+
+                        cryptos.Add(new Crypto(cryptoIdCount, Path.GetFileNameWithoutExtension(csv_path), datetime, opens, highs, lows, closes, volumes, currencies[0]));
+                        cryptoIdCount++;
 
                         datetime.Clear();
                         opens.Clear();
@@ -86,31 +98,116 @@ namespace Plot_That_Line_Nima_Zarrabi
                     else
                     {
                         // Message if CSV contains different values for the currency
-                        MessageBox.Show("Votre CSV est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!");
-                        break;
+                        MessageBox.Show("Votre CSV (" + Path.GetFileName(csv_path) + ") est pourri, y'a plusieurs valeurs different pour le type de monnaie, on peut pas faire un PlotLine avec ces données, c'est pas possible d'être aussi nul!", "Different values in currency field Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Application.Exit();
+                        break;
                     }
                 }
-                foreach (Crypto currentCrypto in cryptos)
+                // if all currencies are the same across CSVs
+                if (!cryptos.Select(c => c.Currency).Distinct().Skip(1).Any())
                 {
-                    // Now plot the data
-                    formsPlot1.Plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close);
+                    Plot plotCanva = new Plot();
+                    //plotCanva.Remove()
+                    //Scatter scatter = new Scatter(new ScatterSourceGenericList<List<double>, List<double>>(xs, ys));
+                    //var scatter2 = ScottlLinePlot.Plot.Add.Scatter(ys, xs);
 
-                    formsPlot1.Plot.YLabel("Price per unit (in " + currentCrypto.Currency + ")");
-                    // tell the plot to display dates on the bottom axis
-                    formsPlot1.Plot.Axes.DateTimeTicksBottom();
+                    //Scatter scatter = new Scatter(new IScatterSource(xs, ys));
+                    //scatter.LineStyle.Color = new Color();
+                    //scatter.MarkerStyle.FillColor = new Color();
+                    //ScottlLinePlot.Plot.PlottableList.Add(scatter);
 
-                    formsPlot1.Refresh();
+                    //ScottlLinePlot.Plot.Add.Plottable(scatter);
+
+
+                    //ScottlLinePlot.Plot.Add.Plot(scatter);
+                    //ScottlLinePlot.Plot.Add.Plottable(scatter);
+
+                    GenerateScottPlot(ScottlLinePlot.Plot, cryptos);
+
+
+                    //ScottlLinePlot.Plot.PlottableList.Add(Scatter(xs, ys,));
+                    /*
+                    ScottlLinePlot.Plot.PlottableList.Add(new Arrow()
+                    {
+                        Base = new Coordinates(1, 2),
+                        Tip = new Coordinates(3, 4),
+                    });*/
                 }
+                else
+                {
+                    MessageBox.Show("Vos CSV séléctionné n'on pas tous le même type de monnaie, et ne peuvent alors pas être comparés.", "Different currency in different files Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                }
+
             }
             else
             {
-                MessageBox.Show("{0} is not a valid directory.");
+                MessageBox.Show("Le répértoire séléctionné \"{0}\" n'est pas un répéroire valid.", "invalid directory Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        private void Form1_Load(object sender, EventArgs e)
+        private void ScottlLinePlot_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void PlotLinesCheckBoxList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void GenerateScottPlot(Plot plot, List<Crypto> cryptos)
+        {
+            // Setup plot
+            plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
+            // tell the plot to display dates on the bottom axis
+            plot.Axes.DateTimeTicksBottom();
+
+            foreach (Crypto currentCrypto in cryptos)
+            {
+                // Now plot the data
+                scatterList.Add(plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close));
+                scatterList.Last().LegendText = currentCrypto.Name;
+                plot.Add.Plottable(scatterList.Last());
+                PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
+
+                // Automatically check new checkboxes as they get made
+                PlotLinesCheckBoxList.SetItemChecked(PlotLinesCheckBoxList.Items.Count - 1, true);
+            }
+            ScottlLinePlot.Refresh();
+        }
+
+
+        private void PlotLinesCheckBoxList_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+
+            if (e.NewValue == CheckState.Checked)
+            {
+
+                ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+                ScottlLinePlot.Refresh();
+                /*
+                foreach (Scatter element in scatterList)
+                {
+                    if (element.LegendText == Convert.ToString(PlotLinesCheckBoxList.Items[e.Index]))
+                    {
+                        ScottlLinePlot.Plot.Add.Plottable(element);
+                        ScottlLinePlot.Refresh();
+                    }
+                }*/
+
+                //MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS UNCHECKED");
+            }
+            else
+            {
+                /// ALMOST FINISHED
+                ScottlLinePlot.Plot.Remove(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+                ScottlLinePlot.Refresh();
+                //MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
+            }
+
+            // MAKE IT SO CHECKING ON/OFF MAKES THE PLOTLINES APPEAR/DISAPEAR
+            //if this.
+            //ScottlLinePlot.Plot.Remove()
         }
     }
 }

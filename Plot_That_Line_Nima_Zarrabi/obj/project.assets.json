@@ -62,7 +62,7 @@
           }
         }
       },
-      "ScottPlot/5.0.37": {
+      "ScottPlot/5.0.39": {
         "type": "package",
         "dependencies": {
           "SkiaSharp": "2.88.8",
@@ -79,10 +79,10 @@
           }
         }
       },
-      "ScottPlot.WinForms/5.0.37": {
+      "ScottPlot.WinForms/5.0.39": {
         "type": "package",
         "dependencies": {
-          "ScottPlot": "5.0.37",
+          "ScottPlot": "5.0.39",
           "SkiaSharp.Views.WindowsForms": "2.88.8"
         },
         "compile": {
@@ -324,10 +324,10 @@
         "opentk.glcontrol.nuspec"
       ]
     },
-    "ScottPlot/5.0.37": {
-      "sha512": "d5jkB/eHbyjL1+gKPQGHhnmif/sOaJAhmqQg21dE3/tzgIvpu5r6JZPUpmV6TxB5f0q35zm0j9wKn2Xl4zIy5w==",
+    "ScottPlot/5.0.39": {
+      "sha512": "SyUIF7OPhieza8Lu/s5uLarBf6mhSPkRuwkJ3/KwTrRtpWmUwtTPWil4IQZ4HVp7Q15F/uRUmRDYTAeQcg9KGg==",
       "type": "package",
-      "path": "scottplot/5.0.37",
+      "path": "scottplot/5.0.39",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -341,14 +341,14 @@
         "lib/netstandard2.0/ScottPlot.dll",
         "lib/netstandard2.0/ScottPlot.xml",
         "readme.md",
-        "scottplot.5.0.37.nupkg.sha512",
+        "scottplot.5.0.39.nupkg.sha512",
         "scottplot.nuspec"
       ]
     },
-    "ScottPlot.WinForms/5.0.37": {
-      "sha512": "oCM53u8oaY3gjAfXrBY1yvSxLqZ95EizXaHOuFPP9SC64JiR5xzrVh57X32JCBONeyR+6GCNJyr788KnuqDDCQ==",
+    "ScottPlot.WinForms/5.0.39": {
+      "sha512": "aG6y5wWbsu/DSYz6vPGItNKTqK4Lw1B7dtsVft1zNSIKnZcWr9EdfVlM+eMj1lxENNU1u9+UTutglSUWSExLlA==",
       "type": "package",
-      "path": "scottplot.winforms/5.0.37",
+      "path": "scottplot.winforms/5.0.39",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -358,7 +358,7 @@
         "lib/net6.0-windows7.0/ScottPlot.WinForms.dll",
         "lib/net6.0-windows7.0/ScottPlot.WinForms.xml",
         "readme.md",
-        "scottplot.winforms.5.0.37.nupkg.sha512",
+        "scottplot.winforms.5.0.39.nupkg.sha512",
         "scottplot.winforms.nuspec"
       ]
     },
@@ -589,29 +589,27 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "ScottPlot.WinForms >= 5.0.37"
+      "ScottPlot.WinForms >= 5.0.39"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pu78ifh\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\nimal\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
+      "projectUniqueName": "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
       "projectName": "Plot_That_Line_Nima_Zarrabi",
-      "projectPath": "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
-      "packagesPath": "C:\\Users\\pu78ifh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\obj\\",
+      "projectPath": "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
+      "packagesPath": "C:\\Users\\nimal\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\pu78ifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\nimal\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -633,11 +631,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -646,7 +639,7 @@
         "dependencies": {
           "ScottPlot.WinForms": {
             "target": "Package",
-            "version": "[5.0.37, )"
+            "version": "[5.0.39, )"
           }
         },
         "imports": [
@@ -668,7 +661,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -677,7 +670,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Le package 'OpenTK 3.1.0' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net8.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "message": "Package 'OpenTK 3.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "OpenTK",
       "targetGraphs": [
         "net8.0-windows7.0"
@@ -687,7 +680,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Le package 'OpenTK.GLControl 3.1.0' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net8.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "message": "Package 'OpenTK.GLControl 3.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "OpenTK.GLControl",
       "targetGraphs": [
         "net8.0-windows7.0"

@@ -1,24 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj": {}
+    "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj": {
+    "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
+        "projectUniqueName": "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
         "projectName": "Plot_That_Line_Nima_Zarrabi",
-        "projectPath": "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
-        "packagesPath": "C:\\Users\\pu78ifh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pu78ifh\\Desktop\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\obj\\",
+        "projectPath": "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\Plot_That_Line_Nima_Zarrabi.csproj",
+        "packagesPath": "C:\\Users\\nimal\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nimal\\Desktop\\Code\\P_Plot_That_Line\\Plot_That_Line_Nima_Zarrabi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\pu78ifh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nimal\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -40,11 +39,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -53,7 +47,7 @@
           "dependencies": {
             "ScottPlot.WinForms": {
               "target": "Package",
-              "version": "[5.0.37, )"
+              "version": "[5.0.39, )"
             }
           },
           "imports": [
@@ -75,7 +69,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
