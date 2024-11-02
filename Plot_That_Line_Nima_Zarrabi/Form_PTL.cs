@@ -18,8 +18,6 @@ namespace Plot_That_Line_Nima_Zarrabi
 
     public partial class Form_PTL : Form
     {
-        private List<double> xs;
-        private List<double> ys;
         private List<Scatter> scatterList = [];
 
         public Form_PTL()
@@ -105,11 +103,6 @@ namespace Plot_That_Line_Nima_Zarrabi
                         break;
                     }
                 }
-
-
-                //List<double> ys = new()
-                xs = [1, 2, 3, 4, 5];
-                ys = [6, 9, 23, 42, 84];
                 // if all currencies are the same across CSVs
                 if (!cryptos.Select(c => c.Currency).Distinct().Skip(1).Any())
                 {
@@ -173,6 +166,7 @@ namespace Plot_That_Line_Nima_Zarrabi
             {
                 // Now plot the data
                 scatterList.Add(plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close));
+                scatterList.Last().LegendText = currentCrypto.Name;
                 plot.Add.Plottable(scatterList.Last());
                 PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
 
@@ -188,17 +182,10 @@ namespace Plot_That_Line_Nima_Zarrabi
 
             if (e.NewValue == CheckState.Checked)
             {
-                /// ALMOST FINISHED
-                ScottlLinePlot.Plot.Remove(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+
+                ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
                 ScottlLinePlot.Refresh();
-                MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
-            }
-            else
-            {
-                // code fait en Linq, non fonctionnel car ScottlLinePlot.Plot.Add.Plottable n'accepte pas un list.Where en paramètre car il le consider comme un array et il demande un seul objet
-                // METTRE .first !!!
-                // !!!
-                // !!! FIRST already there
+                /*
                 foreach (Scatter element in scatterList)
                 {
                     if (element.LegendText == Convert.ToString(PlotLinesCheckBoxList.Items[e.Index]))
@@ -206,19 +193,16 @@ namespace Plot_That_Line_Nima_Zarrabi
                         ScottlLinePlot.Plot.Add.Plottable(element);
                         ScottlLinePlot.Refresh();
                     }
-                }/*
-                ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
-                /*
-                foreach (Scatter element in scatterList)
-                {
-                    if (element.LegendText == PlotLinesCheckBoxList.Items[e.Index])
-                    {
-                        ScottlLinePlot.Plot.Add.Plottable(element);
-                        ScottlLinePlot.Refresh();
-                    }
                 }*/
 
-                MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS UNCHECKED");
+                //MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS UNCHECKED");
+            }
+            else
+            {
+                /// ALMOST FINISHED
+                ScottlLinePlot.Plot.Remove(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+                ScottlLinePlot.Refresh();
+                //MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
             }
 
             // MAKE IT SO CHECKING ON/OFF MAKES THE PLOTLINES APPEAR/DISAPEAR
