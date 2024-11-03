@@ -18,8 +18,6 @@ namespace Plot_That_Line_Nima_Zarrabi
         public List<float> Volume;
         public string Currency;
 
-
-
         internal Crypto(int givenId, string givenName, List<DateTime> givenDateTime, List<float> givenOpen, List<float> givenHigh, List<float> givenLow, List<float> givenClose, List<float> givenVolume, string givenCurrency)
         {
             Id = givenId;
@@ -32,9 +30,43 @@ namespace Plot_That_Line_Nima_Zarrabi
             Volume = givenVolume.ToList();
             Currency = givenCurrency;
         }
-        internal void AddValuesToCrypto(int id)
-        {
 
+        // Unused function to modify the value of a Crypto
+        internal void ChangeCryptoValue(Crypto crypto, string? givenName, List<DateTime>? givenDateTime, List<float>? givenOpen, List<float>? givenHigh, List<float>? givenLow, List<float>? givenClose, List<float>? givenVolume, string? givenCurrency)
+        {
+            if (givenName != null)
+            {
+                crypto.Name = givenName;
+            }
+            if (givenDateTime != null)
+            {
+                crypto.Date = givenDateTime;
+            }
+            if (givenOpen != null)
+            {
+                crypto.Open = givenOpen;
+            }
+            if (givenHigh != null)
+            {
+                crypto.High = givenHigh;
+            }
+            if (givenLow != null)
+            {
+                crypto.Low = givenLow;
+            }
+            if (givenClose != null)
+            {
+                crypto.Close = givenClose;
+            }
+            if (givenVolume != null)
+            {
+                crypto.Volume = givenVolume;
+            }
+            if (givenCurrency != null)
+            {
+                crypto.Currency = givenCurrency;
+            }
         }
     }
 }
+
