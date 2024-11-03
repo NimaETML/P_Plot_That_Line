@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_PTL));
             ScottlLinePlot = new ScottPlot.WinForms.FormsPlot();
             PlotLinesCheckBoxList = new CheckedListBox();
             SuspendLayout();
@@ -37,18 +38,24 @@
             ScottlLinePlot.DisplayScale = 1F;
             ScottlLinePlot.Location = new Point(12, 12);
             ScottlLinePlot.Name = "ScottlLinePlot";
-            ScottlLinePlot.Size = new Size(560, 315);
+            ScottlLinePlot.Size = new Size(571, 411);
             ScottlLinePlot.TabIndex = 0;
             // 
             // PlotLinesCheckBoxList
             // 
+            PlotLinesCheckBoxList.AllowDrop = true;
+            PlotLinesCheckBoxList.BackColor = SystemColors.Control;
+            PlotLinesCheckBoxList.BorderStyle = BorderStyle.None;
+            PlotLinesCheckBoxList.CheckOnClick = true;
+            PlotLinesCheckBoxList.Font = new Font("Segoe UI", 11F);
             PlotLinesCheckBoxList.FormattingEnabled = true;
-            PlotLinesCheckBoxList.Location = new Point(578, 27);
+            PlotLinesCheckBoxList.Location = new Point(589, 34);
             PlotLinesCheckBoxList.Name = "PlotLinesCheckBoxList";
-            PlotLinesCheckBoxList.Size = new Size(210, 274);
+            PlotLinesCheckBoxList.Size = new Size(199, 396);
             PlotLinesCheckBoxList.TabIndex = 1;
-            PlotLinesCheckBoxList.SelectedIndexChanged += PlotLinesCheckBoxList_SelectedIndexChanged;
+            PlotLinesCheckBoxList.UseTabStops = false;
             PlotLinesCheckBoxList.ItemCheck += PlotLinesCheckBoxList_ItemCheck;
+            PlotLinesCheckBoxList.SelectedIndexChanged += PlotLinesCheckBoxList_SelectedIndexChanged;
             // 
             // Form_PTL
             // 
@@ -57,8 +64,9 @@
             ClientSize = new Size(800, 450);
             Controls.Add(PlotLinesCheckBoxList);
             Controls.Add(ScottlLinePlot);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form_PTL";
-            Text = "ScottlLinePlot";
+            Text = "Crypto Visualizer";
             Load += ScottlLinePlot_Load;
             ResumeLayout(false);
         }

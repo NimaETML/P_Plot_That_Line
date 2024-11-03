@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Plot_That_Line_Nima_Zarrabi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1896b0ab84bb29f3fcd99b4d97d388d82e5a6116")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+992586c4d116401e2ee3b98c47f5236ba34e27c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Plot_That_Line_Nima_Zarrabi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Plot_That_Line_Nima_Zarrabi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

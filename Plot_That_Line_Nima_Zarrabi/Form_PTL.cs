@@ -1,3 +1,11 @@
+/*
+ * Nima Zarrabi
+ * ETML
+ * Plot That Line
+ * Ver-1.0
+ * 03/11/2024
+ */
+
 namespace Plot_That_Line_Nima_Zarrabi
 {
     using Microsoft.VisualBasic.FileIO;
@@ -16,6 +24,7 @@ namespace Plot_That_Line_Nima_Zarrabi
     using System.Security.Cryptography;
     using ScottPlot.DataSources;
     using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+    using static System.Windows.Forms.CheckedListBox;
 
     public partial class Form_PTL : Form
     {
@@ -24,6 +33,8 @@ namespace Plot_That_Line_Nima_Zarrabi
         */
 
         const string DEFAULTSOURCEDIR = (@"..\..\..\..\data\data_set_high_cost");
+
+        bool initilized = false;
 
         TextFieldParser parsedcsv;
 
@@ -47,6 +58,8 @@ namespace Plot_That_Line_Nima_Zarrabi
 
         public Form_PTL()
         {
+            InitializeComponent();
+
             // Check if given path is valid
             CheckIfValidPath(DEFAULTSOURCEDIR);
 
@@ -56,14 +69,8 @@ namespace Plot_That_Line_Nima_Zarrabi
             // Check if given path has CSVs in it
             CheckIfCSV(paths, DEFAULTSOURCEDIR);
 
-            //paths.Select(path => AddCSVDataToCrypto(path, parsedcsv, fields, cryptos, cryptoIdCount, datetime, opens, highs, lows, closes, volumes, currencies));
             // Add CSV data to the Crypto class
-            foreach (string csv_path in paths)
-            {
-                AddCSVDataToCrypto(csv_path);
-                cryptoIdCount++;
-            }
-
+            paths.ToList().ForEach(csv_path => AddCSVDataToCrypto(csv_path));
 
             // if all currencies are the same across CSVs
             CheckCurrencyConsistency(cryptos);
@@ -71,65 +78,50 @@ namespace Plot_That_Line_Nima_Zarrabi
             // Generate ScottPlot plot
             GenerateScottPlot(ScottlLinePlot.Plot, cryptos);
 
-        }
-        private void ScottlLinePlot_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void PlotLinesCheckBoxList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            // program now knows it has been initilized and so checking boxes will remove/add scatterlines
+            initilized = true;
         }
         
         private void GenerateScottPlot(Plot plot, List<Crypto> cryptos)
         {
-            // Setup plot
-            plot.YLabel("Price per unit (in " + cryptos[0].Currency + ")");
-            // tell the plot to display dates on the bottom axis
+            // Plott Y axis label
+            // cryptos[0].Currency is used since every cryptos have the same curreny, but the cryptos list will always have at least its [0] position filled
+            plot.YLabel("Price per unit (" + cryptos[0].Currency + ")");
+
+            // Plott displays dates on the bottom axis
             plot.Axes.DateTimeTicksBottom();
 
-            foreach (Crypto currentCrypto in cryptos)
-            {
-                // Now plot the data
-                scatterList.Add(plot.Add.ScatterLine(currentCrypto.Date, currentCrypto.Close));
-                scatterList.Last().LegendText = currentCrypto.Name;
-                plot.Add.Plottable(scatterList.Last());
-                PlotLinesCheckBoxList.Items.Add(currentCrypto.Name);
+            cryptos.ForEach(crypto => GenerateScatterLine(plot, crypto));
 
-                // Automatically check new checkboxes as they get made
-                PlotLinesCheckBoxList.SetItemChecked(PlotLinesCheckBoxList.Items.Count - 1, true);
-            }
+            plot.ShowLegend(Alignment.UpperRight);
             ScottlLinePlot.Refresh();
         }
 
+        private void GenerateScatterLine(Plot plot, Crypto crypto)
+        {
+            // Add new ScatterLine to the plot and to scatterList, then add current crypto name to it's LegendText
+            scatterList.Add(plot.Add.ScatterLine(crypto.Date, crypto.Close));
+            scatterList.Last().LegendText = crypto.Name;
+
+            // Add every crypto to the PlotLinesCheckBoxList and check them all by default
+            PlotLinesCheckBoxList.Items.Add(crypto.Name);
+
+            PlotLinesCheckBoxList.SetItemChecked(PlotLinesCheckBoxList.Items.Count - 1, true);
+        }
 
         private void PlotLinesCheckBoxList_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-
-            if (e.NewValue == CheckState.Checked)
+            // If PlotLinesCheckBoxList element checked, element is added to the ScottlLinePlot, only run once the program has been initiilized
+            if (e.NewValue == CheckState.Checked && initilized)
             {
-
-                ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+                ScottlLinePlot.Plot.Add.Plottable(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index].ToString()).First());
                 ScottlLinePlot.Refresh();
-                /*
-                foreach (Scatter element in scatterList)
-                {
-                    if (element.LegendText == Convert.ToString(PlotLinesCheckBoxList.Items[e.Index]))
-                    {
-                        ScottlLinePlot.Plot.Add.Plottable(element);
-                        ScottlLinePlot.Refresh();
-                    }
-                }*/
-
-                //MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS UNCHECKED");
             }
-            else
+            // If PlotLinesCheckBoxList element unchecked, element is removed from the ScottlLinePlot, only run once the program has been initiilized
+            else if (!(e.NewValue == CheckState.Checked) && initilized)
             {
-                /// ALMOST FINISHED
-                ScottlLinePlot.Plot.Remove(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index]).First());
+                ScottlLinePlot.Plot.Remove(scatterList.Where(scatter => scatter.LegendText == PlotLinesCheckBoxList.Items[e.Index].ToString()).First());
                 ScottlLinePlot.Refresh();
-                //MessageBox.Show(PlotLinesCheckBoxList.Items[e.Index] + "  IS CHECKED");
             }
         }
 
@@ -151,7 +143,7 @@ namespace Plot_That_Line_Nima_Zarrabi
                 Application.Exit();
             }
         }
-
+        
         private void CheckIfCSV(string[] paths, string dir)
         {
             if (paths.Length == 0)
@@ -163,8 +155,8 @@ namespace Plot_That_Line_Nima_Zarrabi
 
         private void AddCSVDataToCrypto(string csv_path)
         {
+            // Setup CSV parser
             parsedcsv = new TextFieldParser(csv_path);
-            // Set CSV parser
             parsedcsv.CommentTokens = new string[] { "#" };
             parsedcsv.SetDelimiters(new string[] { "," });
             parsedcsv.HasFieldsEnclosedInQuotes = true;
@@ -177,8 +169,7 @@ namespace Plot_That_Line_Nima_Zarrabi
                 // Read current line fields, pointer moves to the next line.
                 fields = parsedcsv.ReadFields();
 
-                // Add to the lists
-
+                // Add CSV data to the lists
                 datetime.Add(DateTime.Parse(fields[0]));
                 opens.Add(float.Parse(fields[1])); // Convert open to float
                 highs.Add(float.Parse(fields[2])); // Convert high to float
@@ -207,6 +198,19 @@ namespace Plot_That_Line_Nima_Zarrabi
                 MessageBox.Show("Le CSV (" + Path.GetFileName(csv_path) + ") ne contient pas des valeurs adéquates au programme, veillez vous assurer que le champ correspondant au type de monnai soit consistant", "Different values in currency field Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
+            // Add to CryptoIdCount so next crypto Id will have incremented by 1
+            cryptoIdCount++;
+        }
+
+        // Required function to run the Application
+        private void ScottlLinePlot_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PlotLinesCheckBoxList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
